@@ -15,8 +15,6 @@ function isEmpty(variable) {
 }
 
 router.get("/", async (req, res, next) => {
-	//res.json({ message: 'template message' })
-	//const allContacts = await contacts.listContacts();
 	res.json({
 		status: "success",
 		code: 200,
