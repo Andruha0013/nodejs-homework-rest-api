@@ -4,16 +4,6 @@ const { contactValidation } = require("../../validation/contacts");
 
 const router = express.Router();
 
-const fields = ["name", "email", "phone"];
-
-function isEmpty(variable) {
-	if (variable == "" || variable === undefined) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
 router.get("/", async (req, res, next) => {
 	res.json({
 		status: "success",
@@ -43,31 +33,12 @@ router.get("/:contactId", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-	const keys = Object.keys(req.body);
-
-	let undefFields = [];
-	fields.forEach((element) => {
-		if (keys.includes(element) === false) {
-			undefFields.push(element);
-		} else {
-			if (isEmpty(req.body[element]) === true) {
-				undefFields.push(element);
-			}
-		}
-	});
-	const validError = contactValidation(req.body);
-	if (undefFields.length > 0) {
+	const validError = contactValidation(req.body, true);
+	if (validError) {
 		res.json({
 			status: "faild",
 			code: 400,
-			message: `missing required field(s) such as: ${undefFields.join()}`,
-		});
-	} else if (validError) {
-		res.json({
-			status: "faild",
-			code: 400,
-			message: "validation error",
-			details: validError.error.details,
+			message: validError.error.details[0].message,
 		});
 	} else {
 		const contact = await contacts.addContact(req.body);
@@ -98,30 +69,12 @@ router.delete("/:contactId", async (req, res, next) => {
 });
 
 router.put("/:contactId", async (req, res, next) => {
-	const keys = Object.keys(req.body);
 	const validError = contactValidation(req.body);
-	let undefFields = [];
-	fields.forEach((element) => {
-		if (keys.includes(element) === false) {
-			undefFields.push(element);
-		} else {
-			if (isEmpty(req.body[element]) === true) {
-				undefFields.push(element);
-			}
-		}
-	});
-
-	if (undefFields.length === fields.length) {
+	if (validError) {
 		res.json({
 			status: "faild",
 			code: 400,
-			message: `missing required field(s) such as: ${undefFields.join()}`,
-		});
-	} else if (validError) {
-		res.json({
-			status: "faild",
-			code: 400,
-			message: "validation error",
+			message: validError.error.details[0].message,
 			details: validError.error.details,
 		});
 	} else {
