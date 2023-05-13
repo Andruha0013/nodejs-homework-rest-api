@@ -70,12 +70,13 @@ router.delete("/:contactId", async (req, res, next) => {
 
 router.put("/:contactId", async (req, res, next) => {
 	const validError = contactValidation(req.body);
-	if (validError) {
+	if (validError.error) {
 		res.json({
+			body: req.body,
 			status: "faild",
 			code: 400,
 			message: validError.error.details[0].message,
-			details: validError.error.details,
+			details: validError,
 		});
 	} else {
 		const contact = await contacts.updateContact(
