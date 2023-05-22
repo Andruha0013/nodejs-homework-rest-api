@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const { EMAIL_REGEXP, PHONE_REGEXP } = require("../validation/constants");
 
 const contactSchema = new Schema({
 	name: {
@@ -7,15 +8,20 @@ const contactSchema = new Schema({
 	},
 	email: {
 		type: String,
-		match: /(^[\w\.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})$/,
+		match: EMAIL_REGEXP,
 	},
 	phone: {
 		type: String,
-		match: /^\+|\d[\s\d\-\(\)]*\d$/,
+		match: PHONE_REGEXP,
 	},
 	favorite: {
 		type: Boolean,
 		default: false,
+	},
+	owner: {
+		type: Schema.Types.ObjectId,
+		ref: "user",
+		required: true,
 	},
 });
 
