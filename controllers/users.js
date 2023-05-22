@@ -6,7 +6,6 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 //-----------------------------registration-------------------------------------------------------
 const registration = async (req, res) => {
-	//console.log("registration");
 	const user = await User.findOne({ email: req.body.email });
 	if (user) {
 		throw HttpError(409, "such email is already exist");
@@ -24,7 +23,6 @@ const registration = async (req, res) => {
 };
 //-----------------------------login-------------------------------------------------------
 const login = async (req, res) => {
-	//console.log("login");
 	const user = await User.findOne({ email: req.body.email });
 	if (!user) {
 		throw HttpError(401, "Email or password ivalid");
@@ -61,7 +59,7 @@ const current = async (req, res) => {
 //------------------------------logout-----------------------------------------------------
 const logout = async (req, res) => {
 	const { _id } = req.user;
-	console.log(_id);
+
 	await User.findByIdAndUpdate(_id, { token: "" });
 	res.status(204).json();
 };
