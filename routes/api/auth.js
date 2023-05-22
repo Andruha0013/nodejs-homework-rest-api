@@ -5,7 +5,6 @@ const { registrationSchema, loginSchema } = require("../../validation");
 console.log(userCtrl);
 
 const router = express.Router();
-//console.log(validateBody(registrationSchema));
 router.post(
 	"/registration",
 	validateBody(registrationSchema),
