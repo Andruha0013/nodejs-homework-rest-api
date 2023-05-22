@@ -10,6 +10,7 @@ const contactValidation = (data, requireFlag) => {
 				.max(20)
 				.required()
 				.pattern(/^\+|\d[\s\d\-\(\)]*\d$/),
+			favorite: Joi.bool().required(),
 		});
 		return schema.validate(data);
 	} else {
@@ -21,11 +22,10 @@ const contactValidation = (data, requireFlag) => {
 				.max(20)
 				.pattern(/^\+|\d[\s\d\-\(\)]*\d$/)
 				.optional(),
+			favorite: Joi.bool(),
 		}).min(1);
 		return schema.validate(data);
 	}
 };
 
-module.exports = {
-	contactValidation,
-};
+module.exports = contactValidation;
