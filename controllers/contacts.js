@@ -24,7 +24,10 @@ const listContacts = async (req, res, next) => {
 
 const getContactById = async (req, res, next) => {
 	try {
-		const contact = await Contact.findOne({ _id: req.params.contactId });
+		const contact = await Contact.findOne({
+			_id: req.params.contactId,
+			owner: req.user._id,
+		});
 		switch (contact) {
 			case null:
 				res.status(404).json({
@@ -48,7 +51,10 @@ const getContactById = async (req, res, next) => {
 
 const removeContact = async (req, res, next) => {
 	try {
-		const contact = await Contact.findByIdAndRemove(req.params.contactId);
+		const contact = await Contact.findOneAndRemove({
+			_id: req.params.contactId,
+			owner: req.user._id,
+		});
 		if (contact === null) {
 			res.status(404).json({
 				status: "faild",
@@ -105,8 +111,8 @@ const updateContact = async (req, res, next) => {
 				details: validError,
 			});
 		} else {
-			const contact = await Contact.findByIdAndUpdate(
-				req.params.contactId,
+			const contact = await Contact.findOneAndUpdate(
+				{ _id: req.params.contactId, owner: req.user._id },
 				req.body,
 				{
 					new: true,
