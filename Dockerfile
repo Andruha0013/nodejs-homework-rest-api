@@ -3,4 +3,4 @@ WORKDIR /restApi
 COPY . .
 RUN npm install
 EXPOSE 3000
-CMD [ "node","restApi" ]
+CMD [ "node","server" ]
